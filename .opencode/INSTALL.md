@@ -1,21 +1,21 @@
-# Installing Superpowers for OpenCode
+# 为 OpenCode 安装 Superpowers
 
-## Prerequisites
+## 前置条件
 
-- [OpenCode.ai](https://opencode.ai) installed
-- Git installed
+- 已安装 [OpenCode.ai](https://opencode.ai)
+- 已安装 Git
 
-## Installation Steps
+## 安装步骤
 
-### 1. Clone Superpowers
+### 1. 克隆 Superpowers
 
 ```bash
 git clone https://github.com/obra/superpowers.git ~/.config/opencode/superpowers
 ```
 
-### 2. Register the Plugin
+### 2. 注册插件
 
-Create a symlink so OpenCode discovers the plugin:
+创建符号链接以便 OpenCode 发现插件：
 
 ```bash
 mkdir -p ~/.config/opencode/plugins
@@ -23,9 +23,9 @@ rm -f ~/.config/opencode/plugins/superpowers.js
 ln -s ~/.config/opencode/superpowers/.opencode/plugins/superpowers.js ~/.config/opencode/plugins/superpowers.js
 ```
 
-### 3. Symlink Skills
+### 3. 符号链接技能
 
-Create a symlink so OpenCode's native skill tool discovers superpowers skills:
+创建符号链接以便 OpenCode 的原生 skill 工具发现 superpowers 技能：
 
 ```bash
 mkdir -p ~/.config/opencode/skills
@@ -33,87 +33,87 @@ rm -rf ~/.config/opencode/skills/superpowers
 ln -s ~/.config/opencode/superpowers/skills ~/.config/opencode/skills/superpowers
 ```
 
-### 4. Restart OpenCode
+### 4. 重启 OpenCode
 
-Restart OpenCode. The plugin will automatically inject superpowers context.
+重启 OpenCode。插件将自动注入 superpowers 上下文。
 
-Verify by asking: "do you have superpowers?"
+通过询问验证："你有 superpowers 吗？"
 
-## Usage
+## 使用方法
 
-### Finding Skills
+### 查找技能
 
-Use OpenCode's native `skill` tool to list available skills:
-
-```
-use skill tool to list skills
-```
-
-### Loading a Skill
-
-Use OpenCode's native `skill` tool to load a specific skill:
+使用 OpenCode 的原生 `skill` 工具列出可用技能：
 
 ```
-use skill tool to load superpowers/brainstorming
+使用 skill 工具列出技能
 ```
 
-### Personal Skills
+### 加载技能
 
-Create your own skills in `~/.config/opencode/skills/`:
+使用 OpenCode 的原生 `skill` 工具加载特定技能：
+
+```
+使用 skill 工具加载 superpowers/brainstorming
+```
+
+### 个人技能
+
+在 `~/.config/opencode/skills/` 中创建你自己的技能：
 
 ```bash
 mkdir -p ~/.config/opencode/skills/my-skill
 ```
 
-Create `~/.config/opencode/skills/my-skill/SKILL.md`:
+创建 `~/.config/opencode/skills/my-skill/SKILL.md`：
 
 ```markdown
 ---
 name: my-skill
-description: Use when [condition] - [what it does]
+description: 当 [条件] 时使用 - [功能描述]
 ---
 
-# My Skill
+# 我的技能
 
-[Your skill content here]
+[你的技能内容在这里]
 ```
 
-### Project Skills
+### 项目技能
 
-Create project-specific skills in `.opencode/skills/` within your project.
+在项目内的 `.opencode/skills/` 中创建项目特定的技能。
 
-**Skill Priority:** Project skills > Personal skills > Superpowers skills
+**技能优先级：** 项目技能 > 个人技能 > Superpowers 技能
 
-## Updating
+## 更新
 
 ```bash
 cd ~/.config/opencode/superpowers
 git pull
 ```
 
-## Troubleshooting
+## 故障排除
 
-### Plugin not loading
+### 插件未加载
 
-1. Check plugin symlink: `ls -l ~/.config/opencode/plugins/superpowers.js`
-2. Check source exists: `ls ~/.config/opencode/superpowers/.opencode/plugins/superpowers.js`
-3. Check OpenCode logs for errors
+1. 检查插件符号链接：`ls -l ~/.config/opencode/plugins/superpowers.js`
+2. 检查源文件是否存在：`ls ~/.config/opencode/superpowers/.opencode/plugins/superpowers.js`
+3. 检查 OpenCode 日志中的错误
 
-### Skills not found
+### 技能未找到
 
-1. Check skills symlink: `ls -l ~/.config/opencode/skills/superpowers`
-2. Verify it points to: `~/.config/opencode/superpowers/skills`
-3. Use `skill` tool to list what's discovered
+1. 检查技能符号链接：`ls -l ~/.config/opencode/skills/superpowers`
+2. 验证它指向：`~/.config/opencode/superpowers/skills`
+3. 使用 `skill` 工具列出已发现的内容
 
-### Tool mapping
+### 工具映射
 
-When skills reference Claude Code tools:
+当技能引用 Claude Code 工具时：
 - `TodoWrite` → `todowrite`
-- `Task` with subagents → `@mention` syntax
-- `Skill` tool → OpenCode's native `skill` tool
-- File operations → your native tools
+- 带有 subagent 的 `Task` → `@mention` 语法
+- `Skill` 工具 → OpenCode 的原生 `skill` 工具
+- 文件操作 → 你的原生工具
 
-## Getting Help
+## 获取帮助
 
-- Report issues: https://github.com/obra/superpowers/issues
-- Full documentation: https://github.com/obra/superpowers/blob/main/docs/README.opencode.md
+- 问题反馈：https://github.com/obra/superpowers/issues
+- 完整文档：https://github.com/obra/superpowers/blob/main/docs/README.opencode.md
