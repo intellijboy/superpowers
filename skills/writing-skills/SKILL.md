@@ -288,17 +288,11 @@ wc -w skills/path/SKILL.md
 
 ## 流程图使用
 
-```dot
-digraph when_flowchart {
-    "需要显示信息？" [shape=diamond];
-    "我可能出错的决策？" [shape=diamond];
-    "使用 markdown" [shape=box];
-    "小型内联流程图" [shape=box];
-
-    "需要显示信息？" -> "我可能出错的决策？" [label="是"];
-    "我可能出错的决策？" -> "小型内联流程图" [label="是"];
-    "我可能出错的决策？" -> "使用 markdown" [label="否"];
-}
+```mermaid
+flowchart TD
+    A{需要显示信息？} -->|是| B{我可能出错的决策？}
+    B -->|是| C[小型内联流程图]
+    B -->|否| D[使用 markdown]
 ```
 
 **仅在以下情况使用流程图：**

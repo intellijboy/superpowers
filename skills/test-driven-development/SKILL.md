@@ -46,26 +46,17 @@ description: 当实现任何功能或 bug 修复时，在编写实现代码之�
 
 ## 红-绿-重构
 
-```dot
-digraph tdd_cycle {
-    rankdir=LR;
-    red [label="RED\n编写失败测试", shape=box, style=filled, fillcolor="#ffcccc"];
-    verify_red [label="验证正确\n失败", shape=diamond];
-    green [label="GREEN\n最小代码", shape=box, style=filled, fillcolor="#ccffcc"];
-    verify_green [label="验证通过\n全部绿色", shape=diamond];
-    refactor [label="REFACTOR\n清理", shape=box, style=filled, fillcolor="#ccccff"];
-    next [label="下一步", shape=ellipse];
-
-    red -> verify_red;
-    verify_red -> green [label="是"];
-    verify_red -> red [label="错误\n失败"];
-    green -> verify_green;
-    verify_green -> refactor [label="是"];
-    verify_green -> green [label="否"];
-    refactor -> verify_green [label="保持\n绿色"];
-    verify_green -> next;
-    next -> red;
-}
+```mermaid
+flowchart LR
+    RED[RED 编写失败测试] --> VR{验证正确失败}
+    VR -->|是| GREEN[GREEN 最小代码]
+    VR -->|"错误失败"| RED
+    GREEN --> VG{验证通过全部绿色}
+    VG -->|是| REFACTOR[REFACTOR 清理]
+    VG -->|否| GREEN
+    REFACTOR -->|"保持绿色"| VG
+    VG --> NEXT([下一步])
+    NEXT --> RED
 ```
 
 ### RED - 编写失败测试

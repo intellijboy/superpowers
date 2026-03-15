@@ -43,34 +43,20 @@ Superpowers 技能覆盖默认系统提示行为，但**用户指令始终优先
 
 **在任何响应或操作之前调用相关或请求的技能。** 即使只有 1% 的可能性技能可能适用，你也应该调用技能来检查。如果调用的技能结果不适合情况，你不需要使用它。
 
-```dot
-digraph skill_flow {
-    "收到用户消息" [shape=doublecircle];
-    "即将 EnterPlanMode？" [shape=doublecircle];
-    "已经头脑风暴过？" [shape=diamond];
-    "调用头脑风暴技能" [shape=box];
-    "可能有技能适用？" [shape=diamond];
-    "调用 Skill 工具" [shape=box];
-    "宣布：'使用 [skill] 来 [目的]'" [shape=box];
-    "有检查清单？" [shape=diamond];
-    "为每项创建 TodoWrite todo" [shape=box];
-    "完全遵循技能" [shape=box];
-    "响应（包括澄清）" [shape=doublecircle];
-
-    "即将 EnterPlanMode？" -> "已经头脑风暴过？";
-    "已经头脑风暴过？" -> "调用头脑风暴技能" [label="否"];
-    "已经头脑风暴过？" -> "可能有技能适用？" [label="是"];
-    "调用头脑风暴技能" -> "可能有技能适用？";
-
-    "收到用户消息" -> "可能有技能适用？";
-    "可能有技能适用？" -> "调用 Skill 工具" [label="是，即使 1%"];
-    "可能有技能适用？" -> "响应（包括澄清）" [label="绝对没有"];
-    "调用 Skill 工具" -> "宣布：'使用 [skill] 来 [purpose]'";
-    "宣布：'使用 [skill] 来 [purpose]'" -> "有检查清单？";
-    "有检查清单？" -> "为每项创建 TodoWrite todo" [label="是"];
-    "有检查清单？" -> "完全遵循技能" [label="否"];
-    "为每项创建 TodoWrite todo" -> "完全遵循技能";
-}
+```mermaid
+flowchart TD
+    MSG((收到用户消息)) --> SC{可能有技能适用？}
+    PLAN((即将 EnterPlanMode？)) --> BTC{已经头脑风暴过？}
+    BTC -->|否| CBT[调用头脑风暴技能]
+    BTC -->|是| SC
+    CBT --> SC
+    SC -->|"是，即使 1%"| CS[调用 Skill 工具]
+    SC -->|绝对没有| RESP((响应（包括澄清）))
+    CS --> ANN["宣布：使用 [skill] 来 [purpose]"]
+    ANN --> CLQ{有检查清单？}
+    CLQ -->|是| CT[为每项创建 TodoWrite todo]
+    CLQ -->|否| FLW[完全遵循技能]
+    CT --> FLW
 ```
 
 ## 警示

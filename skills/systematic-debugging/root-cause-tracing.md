@@ -8,19 +8,12 @@ Bug 经常在调用栈深处显现（在错误目录中 git init、在错误位�
 
 ## 何时使用
 
-```dot
-digraph when_to_use {
-    "Bug 在栈深处显现？" [shape=diamond];
-    "能向后跟踪？" [shape=diamond];
-    "在症状点修复" [shape=box];
-    "跟踪到原始触发器" [shape=box];
-    "更好：同时添加深度防御" [shape=box];
-
-    "Bug 在栈深处显现？" -> "能向后跟踪？" [label="是"];
-    "能向后跟踪？" -> "跟踪到原始触发器" [label="是"];
-    "能向后跟踪？" -> "在症状点修复" [label="否 - 死胡同"];
-    "跟踪到原始触发器" -> "更好：同时添加深度防御";
-}
+```mermaid
+flowchart TD
+    A{Bug 在栈深处显现？} -->|是| B{能向后跟踪？}
+    B -->|是| C[跟踪到原始触发器]
+    B -->|"否 - 死胡同"| D[在症状点修复]
+    C --> E[更好：同时添加深度防御]
 ```
 
 **使用当：**
@@ -129,26 +122,16 @@ npm test 2>&1 | grep 'DEBUG git init'
 
 ## 关键原则
 
-```dot
-digraph principle {
-    "找到直接原因" [shape=ellipse];
-    "能向上一级跟踪？" [shape=diamond];
-    "向后跟踪" [shape=box];
-    "这是源头吗？" [shape=diamond];
-    "在源头修复" [shape=box];
-    "在每层添加验证" [shape=box];
-    "Bug 不可能" [shape=doublecircle];
-    "永远不要只修复症状" [shape=octagon, style=filled, fillcolor=red, fontcolor=white];
-
-    "找到直接原因" -> "能向上一级跟踪？";
-    "能向上一级跟踪？" -> "向后跟踪" [label="是"];
-    "能向上一级跟踪？" -> "永远不要只修复症状" [label="否"];
-    "向后跟踪" -> "这是源头吗？";
-    "这是源头吗？" -> "向后跟踪" [label="否 - 继续进行"];
-    "这是源头吗？" -> "在源头修复" [label="是"];
-    "在源头修复" -> "在每层添加验证";
-    "在每层添加验证" -> "Bug 不可能";
-}
+```mermaid
+flowchart TD
+    A([找到直接原因]) --> B{能向上一级跟踪？}
+    B -->|是| C[向后跟踪]
+    B -->|否| D[永远不要只修复症状]
+    C --> E{这是源头吗？}
+    E -->|"否 - 继续进行"| C
+    E -->|是| F[在源头修复]
+    F --> G[在每层添加验证]
+    G --> H(((Bug 不可能)))
 ```
 
 **永远不要只修复错误出现的地方。** 跟踪回去找到原始触发器。

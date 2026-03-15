@@ -13,22 +13,14 @@ description: 当在当前会话中执行具有独立任务的实现计划时使�
 
 ## 何时使用
 
-```dot
-digraph when_to_use {
-    "有实现计划？" [shape=diamond];
-    "任务大多独立？" [shape=diamond];
-    "留在本会话？" [shape=diamond];
-    "subagent-driven-development" [shape=box];
-    "executing-plans" [shape=box];
-    "手动执行或先头脑风暴" [shape=box];
-
-    "有实现计划？" -> "任务大多独立？" [label="是"];
-    "有实现计划？" -> "手动执行或先头脑风暴" [label="否"];
-    "任务大多独立？" -> "留在本会话？" [label="是"];
-    "任务大多独立？" -> "手动执行或先头脑风暴" [label="否 - 紧密耦合"];
-    "留在本会话？" -> "subagent-driven-development" [label="是"];
-    "留在本会话？" -> "executing-plans" [label="否 - 并行会话"];
-}
+```mermaid
+flowchart TD
+    A{有实现计划？} -->|是| B{任务大多独立？}
+    A -->|否| C[手动执行或先头脑风暴]
+    B -->|是| D{留在本会话？}
+    B -->|"否 - 紧密耦合"| C
+    D -->|是| E[subagent-driven-development]
+    D -->|"否 - 并行会话"| F[executing-plans]
 ```
 
 **vs. Executing Plans（并行会话）：**
@@ -39,49 +31,45 @@ digraph when_to_use {
 
 ## 流程
 
-```dot
-digraph process {
-    rankdir=TB;
+```mermaid
+flowchart TD
+    Start["读取计划，提取所有任务及完整文本，记录上下文，创建 TodoWrite"]
+    MoreTasks{还有更多任务？}
+    FinalReview[派遣最终代码审查者子代理审查整个实现]
+    Finish[使用 superpowers:finishing-a-development-branch]
 
-    subgraph cluster_per_task {
-        label="每个任务";
-        "派遣实现者子代理 (./implementer-prompt.md)" [shape=box];
-        "实现者子代理提问？" [shape=diamond];
-        "回答问题，提供上下文" [shape=box];
-        "实现者子代理实现、测试、提交、自我审查" [shape=box];
-        "派遣规格审查者子代理 (./spec-reviewer-prompt.md)" [shape=box];
-        "规格审查者子代理确认代码匹配规格？" [shape=diamond];
-        "实现者子代理修复规格差距" [shape=box];
-        "派遣代码质量审查者子代理 (./code-quality-reviewer-prompt.md)" [shape=box];
-        "代码质量审查者子代理批准？" [shape=diamond];
-        "实现者子代理修复质量问题" [shape=box];
-        "在 TodoWrite 中标记任务完成" [shape=box];
-    }
+    subgraph 每个任务
+        Impl[派遣实现者子代理]
+        ImplQ{实现者子代理提问？}
+        Answer[回答问题，提供上下文]
+        ImplWork[实现者子代理实现、测试、提交、自我审查]
+        SpecReview[派遣规格审查者子代理]
+        SpecQ{规格审查者子代理确认代码匹配规格？}
+        SpecFix[实现者子代理修复规格差距]
+        QualReview[派遣代码质量审查者子代理]
+        QualQ{代码质量审查者子代理批准？}
+        QualFix[实现者子代理修复质量问题]
+        Done["在 TodoWrite 中标记任务完成"]
+    end
 
-    "读取计划，提取所有任务及完整文本，记录上下文，创建 TodoWrite" [shape=box];
-    "还有更多任务？" [shape=diamond];
-    "派遣最终代码审查者子代理审查整个实现" [shape=box];
-    "使用 superpowers:finishing-a-development-branch" [shape=box style=filled fillcolor=lightgreen];
-
-    "读取计划，提取所有任务及完整文本，记录上下文，创建 TodoWrite" -> "派遣实现者子代理 (./implementer-prompt.md)";
-    "派遣实现者子代理 (./implementer-prompt.md)" -> "实现者子代理提问？";
-    "实现者子代理提问？" -> "回答问题，提供上下文" [label="是"];
-    "回答问题，提供上下文" -> "派遣实现者子代理 (./implementer-prompt.md)";
-    "实现者子代理提问？" -> "实现者子代理实现、测试、提交、自我审查" [label="否"];
-    "实现者子代理实现、测试、提交、自我审查" -> "派遣规格审查者子代理 (./spec-reviewer-prompt.md)";
-    "派遣规格审查者子代理 (./spec-reviewer-prompt.md)" -> "规格审查者子代理确认代码匹配规格？";
-    "规格审查者子代理确认代码匹配规格？" -> "实现者子代理修复规格差距" [label="否"];
-    "实现者子代理修复规格差距" -> "派遣规格审查者子代理 (./spec-reviewer-prompt.md)" [label="重新审查"];
-    "规格审查者子代理确认代码匹配规格？" -> "派遣代码质量审查者子代理 (./code-quality-reviewer-prompt.md)" [label="是"];
-    "派遣代码质量审查者子代理 (./code-quality-reviewer-prompt.md)" -> "代码质量审查者子代理批准？";
-    "代码质量审查者子代理批准？" -> "实现者子代理修复质量问题" [label="否"];
-    "实现者子代理修复质量问题" -> "派遣代码质量审查者子代理 (./code-quality-reviewer-prompt.md)" [label="重新审查"];
-    "代码质量审查者子代理批准？" -> "在 TodoWrite 中标记任务完成" [label="是"];
-    "在 TodoWrite 中标记任务完成" -> "还有更多任务？";
-    "还有更多任务？" -> "派遣实现者子代理 (./implementer-prompt.md)" [label="是"];
-    "还有更多任务？" -> "派遣最终代码审查者子代理审查整个实现" [label="否"];
-    "派遣最终代码审查者子代理审查整个实现" -> "使用 superpowers:finishing-a-development-branch";
-}
+    Start --> Impl
+    Impl --> ImplQ
+    ImplQ -->|是| Answer
+    Answer --> Impl
+    ImplQ -->|否| ImplWork
+    ImplWork --> SpecReview
+    SpecReview --> SpecQ
+    SpecQ -->|否| SpecFix
+    SpecFix -->|重新审查| SpecReview
+    SpecQ -->|是| QualReview
+    QualReview --> QualQ
+    QualQ -->|否| QualFix
+    QualFix -->|重新审查| QualReview
+    QualQ -->|是| Done
+    Done --> MoreTasks
+    MoreTasks -->|是| Impl
+    MoreTasks -->|否| FinalReview
+    FinalReview --> Finish
 ```
 
 ## 模型选择
