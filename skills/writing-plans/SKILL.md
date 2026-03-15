@@ -1,76 +1,76 @@
 ---
 name: writing-plans
-description: Use when you have a spec or requirements for a multi-step task, before touching code
+description: 当你有多步骤任务的规格或需求时，在触及代码之前使用
 ---
 
-# Writing Plans
+# 编写计划
 
-## Overview
+## 概述
 
-Write comprehensive implementation plans assuming the engineer has zero context for our codebase and questionable taste. Document everything they need to know: which files to touch for each task, code, testing, docs they might need to check, how to test it. Give them the whole plan as bite-sized tasks. DRY. YAGNI. TDD. Frequent commits.
+编写全面的实现计划，假设工程师对我们的代码库零上下文和品味存疑。记录他们需要知道的一切：每个任务要触及哪些文件、代码、测试、他们可能需要检查的文档、如何测试。以小任务形式给他们整个计划。DRY。YAGNI。TDD。频繁提交。
 
-Assume they are a skilled developer, but know almost nothing about our toolset or problem domain. Assume they don't know good test design very well.
+假设他们是熟练的开发者，但对我们工具集或问题领域几乎一无所知。假设他们不太了解好的测试设计。
 
-**Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
+**开始时宣布：** "我正在使用 writing-plans 技能创建实现计划。"
 
-**Context:** This should be run in a dedicated worktree (created by brainstorming skill).
+**上下文：** 这应该在专用 worktree 中运行（由头脑风暴技能创建）。
 
-**Save plans to:** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
-- (User preferences for plan location override this default)
+**保存计划到：** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
+- （用户对计划位置的偏好覆盖此默认值）
 
-## Scope Check
+## 范围检查
 
-If the spec covers multiple independent subsystems, it should have been broken into sub-project specs during brainstorming. If it wasn't, suggest breaking this into separate plans — one per subsystem. Each plan should produce working, testable software on its own.
+如果规格覆盖多个独立子系统，它应该在头脑风暴期间被分解为子项目规格。如果没有，建议将其分解为单独的计划 — 每个子系统一个。每个计划应该独立产生可工作的、可测试的软件。
 
-## File Structure
+## 文件结构
 
-Before defining tasks, map out which files will be created or modified and what each one is responsible for. This is where decomposition decisions get locked in.
+在定义任务之前，映射出将创建或修改哪些文件以及每个文件负责什么。这是分解决策被锁定的地方。
 
-- Design units with clear boundaries and well-defined interfaces. Each file should have one clear responsibility.
-- You reason best about code you can hold in context at once, and your edits are more reliable when files are focused. Prefer smaller, focused files over large ones that do too much.
-- Files that change together should live together. Split by responsibility, not by technical layer.
-- In existing codebases, follow established patterns. If the codebase uses large files, don't unilaterally restructure - but if a file you're modifying has grown unwieldy, including a split in the plan is reasonable.
+- 设计具有清晰边界和定义良好接口的单元。每个文件应该有一个明确的职责。
+- 你对可以一次保持在上下文中的代码推理最好，当文件专注时你的编辑更可靠。更喜欢较小的、专注的文件而不是做太多的大文件。
+- 一起更改的文件应该放在一起。按职责分割，而不是按技术层。
+- 在现有代码库中，遵循既定模式。如果代码库使用大文件，不要单方面重构 — 但如果你修改的文件变得笨拙，在计划中包含拆分是合理的。
 
-This structure informs the task decomposition. Each task should produce self-contained changes that make sense independently.
+此结构为任务分解提供信息。每个任务应该产生可以独立理解的自包含更改。
 
-## Bite-Sized Task Granularity
+## 小任务粒度
 
-**Each step is one action (2-5 minutes):**
-- "Write the failing test" - step
-- "Run it to make sure it fails" - step
-- "Implement the minimal code to make the test pass" - step
-- "Run the tests and make sure they pass" - step
-- "Commit" - step
+**每个步骤是一个动作（2-5 分钟）：**
+- "编写失败测试" - 步骤
+- "运行它以确保失败" - 步骤
+- "实现最小代码使测试通过" - 步骤
+- "运行测试并确保通过" - 步骤
+- "提交" - 步骤
 
-## Plan Document Header
+## 计划文档头部
 
-**Every plan MUST start with this header:**
+**每个计划必须以此头部开始：**
 
 ```markdown
-# [Feature Name] Implementation Plan
+# [功能名称] 实现计划
 
-> **For agentic workers:** REQUIRED: Use superpowers:subagent-driven-development (if subagents available) or superpowers:executing-plans to implement this plan. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **对于代理工作者：** 必需：使用 superpowers:subagent-driven-development（如果有子代理）或 superpowers:executing-plans 来实现此计划。步骤使用复选框（`- [ ]`）语法进行跟踪。
 
-**Goal:** [One sentence describing what this builds]
+**目标：** [一句话描述这构建什么]
 
-**Architecture:** [2-3 sentences about approach]
+**架构：** [2-3 句关于方法]
 
-**Tech Stack:** [Key technologies/libraries]
+**技术栈：** [关键技术/库]
 
 ---
 ```
 
-## Task Structure
+## 任务结构
 
 ````markdown
-### Task N: [Component Name]
+### 任务 N：[组件名称]
 
-**Files:**
-- Create: `exact/path/to/file.py`
-- Modify: `exact/path/to/existing.py:123-145`
-- Test: `tests/exact/path/to/test.py`
+**文件：**
+- 创建：`exact/path/to/file.py`
+- 修改：`exact/path/to/existing.py:123-145`
+- 测试：`tests/exact/path/to/test.py`
 
-- [ ] **Step 1: Write the failing test**
+- [ ] **步骤 1：编写失败测试**
 
 ```python
 def test_specific_behavior():
@@ -78,24 +78,24 @@ def test_specific_behavior():
     assert result == expected
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [ ] **步骤 2：运行测试验证它失败**
 
-Run: `pytest tests/path/test.py::test_name -v`
-Expected: FAIL with "function not defined"
+运行：`pytest tests/path/test.py::test_name -v`
+预期：FAIL with "function not defined"
 
-- [ ] **Step 3: Write minimal implementation**
+- [ ] **步骤 3：编写最小实现**
 
 ```python
 def function(input):
     return expected
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [ ] **步骤 4：运行测试验证它通过**
 
-Run: `pytest tests/path/test.py::test_name -v`
-Expected: PASS
+运行：`pytest tests/path/test.py::test_name -v`
+预期：PASS
 
-- [ ] **Step 5: Commit**
+- [ ] **步骤 5：提交**
 
 ```bash
 git add tests/path/test.py src/path/file.py
@@ -103,45 +103,45 @@ git commit -m "feat: add specific feature"
 ```
 ````
 
-## Remember
-- Exact file paths always
-- Complete code in plan (not "add validation")
-- Exact commands with expected output
-- Reference relevant skills with @ syntax
-- DRY, YAGNI, TDD, frequent commits
+## 记住
+- 始终确切的文件路径
+- 计划中的完整代码（不是"添加验证"）
+- 带有预期输出的确切命令
+- 用 @ 语法引用相关技能
+- DRY、YAGNI、TDD、频繁提交
 
-## Plan Review Loop
+## 计划审查循环
 
-After completing each chunk of the plan:
+完成计划的每个块后：
 
-1. Dispatch plan-document-reviewer subagent (see plan-document-reviewer-prompt.md) with precisely crafted review context — never your session history. This keeps the reviewer focused on the plan, not your thought process.
-   - Provide: chunk content, path to spec document
-2. If ❌ Issues Found:
-   - Fix the issues in the chunk
-   - Re-dispatch reviewer for that chunk
-   - Repeat until ✅ Approved
-3. If ✅ Approved: proceed to next chunk (or execution handoff if last chunk)
+1. 派遣 plan-document-reviewer 子代理（参见 plan-document-reviewer-prompt.md）带有精确编写的审查上下文 — 永远不是你的会话历史。这让审查者专注于计划，而不是你的思考过程。
+   - 提供：块内容，规格文档路径
+2. 如果 ❌ 发现问题：
+   - 修复块中的问题
+   - 为该块重新派遣审查者
+   - 重复直到 ✅ 已批准
+3. 如果 ✅ 已批准：继续到下一个块（或如果是最后一块则交接执行）
 
-**Chunk boundaries:** Use `## Chunk N: <name>` headings to delimit chunks. Each chunk should be ≤1000 lines and logically self-contained.
+**块边界：** 使用 `## 块 N：<name>` 标题来划分块。每个块应该 ≤1000 行且逻辑上自包含。
 
-**Review loop guidance:**
-- Same agent that wrote the plan fixes it (preserves context)
-- If loop exceeds 5 iterations, surface to human for guidance
-- Reviewers are advisory - explain disagreements if you believe feedback is incorrect
+**审查循环指导：**
+- 编写计划的同一代理修复它（保留上下文）
+- 如果循环超过 5 次迭代，升级给人工寻求指导
+- 审查者是顾问性的 — 如果你相信反馈不正确，解释分歧
 
-## Execution Handoff
+## 执行交接
 
-After saving the plan:
+保存计划后：
 
-**"Plan complete and saved to `docs/superpowers/plans/<filename>.md`. Ready to execute?"**
+**"计划完成并保存到 `docs/superpowers/plans/<filename>.md`。准备执行？"**
 
-**Execution path depends on harness capabilities:**
+**执行路径取决于 harness 能力：**
 
-**If harness has subagents (Claude Code, etc.):**
-- **REQUIRED:** Use superpowers:subagent-driven-development
-- Do NOT offer a choice - subagent-driven is the standard approach
-- Fresh subagent per task + two-stage review
+**如果 harness 有子代理（Claude Code 等）：**
+- **必需：** 使用 superpowers:subagent-driven-development
+- 不要提供选择 — 子代理驱动是标准方法
+- 每个任务新子代理 + 两阶段审查
 
-**If harness does NOT have subagents:**
-- Execute plan in current session using superpowers:executing-plans
-- Batch execution with checkpoints for review
+**如果 harness 没有子代理：**
+- 使用 superpowers:executing-plans 在当前会话中执行计划
+- 带检查点的批量执行以供审查

@@ -1,52 +1,52 @@
-# Plan Document Reviewer Prompt Template
+# 计划文档审查者提示模板
 
-Use this template when dispatching a plan document reviewer subagent.
+当派遣计划文档审查子代理时使用此模板。
 
-**Purpose:** Verify the plan chunk is complete, matches the spec, and has proper task decomposition.
+**目的：** 验证计划块完整、匹配规格，并有适当的任务分解。
 
-**Dispatch after:** Each plan chunk is written
+**派遣时机：** 每个计划块编写完成后
 
 ```
-Task tool (general-purpose):
-  description: "Review plan chunk N"
+Task 工具（general-purpose）：
+  description: "审查计划块 N"
   prompt: |
-    You are a plan document reviewer. Verify this plan chunk is complete and ready for implementation.
+    你是一位计划文档审查者。验证此计划块完整并准备好进行实现。
 
-    **Plan chunk to review:** [PLAN_FILE_PATH] - Chunk N only
-    **Spec for reference:** [SPEC_FILE_PATH]
+    **要审查的计划块：** [PLAN_FILE_PATH] - 仅块 N
+    **供参考的规格：** [SPEC_FILE_PATH]
 
-    ## What to Check
+    ## 检查内容
 
-    | Category | What to Look For |
-    |----------|------------------|
-    | Completeness | TODOs, placeholders, incomplete tasks, missing steps |
-    | Spec Alignment | Chunk covers relevant spec requirements, no scope creep |
-    | Task Decomposition | Tasks atomic, clear boundaries, steps actionable |
-    | File Structure | Files have clear single responsibilities, split by responsibility not layer |
-    | File Size | Would any new or modified file likely grow large enough to be hard to reason about as a whole? |
-    | Task Syntax | Checkbox syntax (`- [ ]`) on steps for tracking |
-    | Chunk Size | Each chunk under 1000 lines |
+    | 类别 | 查找内容 |
+    |------|----------|
+    | 完整性 | TODO、占位符、不完整的任务、缺失步骤 |
+    | 规格对齐 | 块覆盖相关规格需求，无范围蔓延 |
+    | 任务分解 | 任务原子化、边界清晰、步骤可操作 |
+    | 文件结构 | 文件有清晰的单一职责、按职责而非层拆分 |
+    | 文件大小 | 任何新文件或修改的文件是否可能增长到难以整体理解？ |
+    | 任务语法 | 步骤使用复选框语法（`- [ ]`）进行跟踪 |
+    | 块大小 | 每个块低于 1000 行 |
 
-    ## CRITICAL
+    ## 关键
 
-    Look especially hard for:
-    - Any TODO markers or placeholder text
-    - Steps that say "similar to X" without actual content
-    - Incomplete task definitions
-    - Missing verification steps or expected outputs
-    - Files planned to hold multiple responsibilities or likely to grow unwieldy
+    特别注意查找：
+    - 任何 TODO 标记或占位符文本
+    - 说"类似于 X"但没有实际内容的步骤
+    - 不完整的任务定义
+    - 缺失验证步骤或预期输出
+    - 计划持有多个职责或可能变得笨拙的文件
 
-    ## Output Format
+    ## 输出格式
 
-    ## Plan Review - Chunk N
+    ## 计划审查 - 块 N
 
-    **Status:** Approved | Issues Found
+    **状态：** ✅ 已批准 | ❌ 发现问题
 
-    **Issues (if any):**
-    - [Task X, Step Y]: [specific issue] - [why it matters]
+    **问题（如果有）：**
+    - [任务 X，步骤 Y]：[具体问题] - [为什么重要]
 
-    **Recommendations (advisory):**
-    - [suggestions that don't block approval]
+    **建议（仅供参考）：**
+    - [不阻止批准的建议]
 ```
 
-**Reviewer returns:** Status, Issues (if any), Recommendations
+**审查者返回：** 状态、问题（如果有）、建议

@@ -1,50 +1,50 @@
-# Spec Document Reviewer Prompt Template
+# 规格文档审查者提示模板
 
-Use this template when dispatching a spec document reviewer subagent.
+当派遣规格文档审查子代理时使用此模板。
 
-**Purpose:** Verify the spec is complete, consistent, and ready for implementation planning.
+**目的：** 验证规格完整、一致，并准备好进行实现规划。
 
-**Dispatch after:** Spec document is written to docs/superpowers/specs/
+**派遣时机：** 规格文档写入 docs/superpowers/specs/ 后
 
 ```
-Task tool (general-purpose):
-  description: "Review spec document"
+Task 工具（general-purpose）：
+  description: "审查规格文档"
   prompt: |
-    You are a spec document reviewer. Verify this spec is complete and ready for planning.
+    你是一位规格文档审查者。验证此规格完整并准备好进行规划。
 
-    **Spec to review:** [SPEC_FILE_PATH]
+    **要审查的规格：** [SPEC_FILE_PATH]
 
-    ## What to Check
+    ## 检查内容
 
-    | Category | What to Look For |
-    |----------|------------------|
-    | Completeness | TODOs, placeholders, "TBD", incomplete sections |
-    | Coverage | Missing error handling, edge cases, integration points |
-    | Consistency | Internal contradictions, conflicting requirements |
-    | Clarity | Ambiguous requirements |
-    | YAGNI | Unrequested features, over-engineering |
-    | Scope | Focused enough for a single plan — not covering multiple independent subsystems |
-    | Architecture | Units with clear boundaries, well-defined interfaces, independently understandable and testable |
+    | 类别 | 查找内容 |
+    |------|----------|
+    | 完整性 | TODO、占位符、"TBD"、不完整的部分 |
+    | 覆盖范围 | 缺失的错误处理、边缘情况、集成点 |
+    | 一致性 | 内部矛盾、冲突的需求 |
+    | 清晰度 | 模糊的需求 |
+    | YAGNI | 未请求的功能、过度工程 |
+    | 范围 | 是否足够聚焦于单个计划 — 是否覆盖多个独立子系统 |
+    | 架构 | 具有清晰边界的单元、定义良好的接口、可独立理解和测试 |
 
-    ## CRITICAL
+    ## 关键
 
-    Look especially hard for:
-    - Any TODO markers or placeholder text
-    - Sections saying "to be defined later" or "will spec when X is done"
-    - Sections noticeably less detailed than others
-    - Units that lack clear boundaries or interfaces — can you understand what each unit does without reading its internals?
+    特别注意查找：
+    - 任何 TODO 标记或占位符文本
+    - 说"稍后定义"或"等 X 完成后再规格"的部分
+    - 明显比其他部分细节少的部分
+    - 缺乏清晰边界或接口的单元 — 你能否在不阅读其内部的情况下理解每个单元做什么？
 
-    ## Output Format
+    ## 输出格式
 
-    ## Spec Review
+    ## 规格审查
 
-    **Status:** ✅ Approved | ❌ Issues Found
+    **状态：** ✅ 已批准 | ❌ 发现问题
 
-    **Issues (if any):**
-    - [Section X]: [specific issue] - [why it matters]
+    **问题（如果有）：**
+    - [部分 X]：[具体问题] - [为什么重要]
 
-    **Recommendations (advisory):**
-    - [suggestions that don't block approval]
+    **建议（仅供参考）：**
+    - [不阻止批准的建议]
 ```
 
-**Reviewer returns:** Status, Issues (if any), Recommendations
+**审查者返回：** 状态、问题（如果有）、建议
